@@ -8,7 +8,7 @@ ap = vessel.auto_pilot
 sc = conn.space_center
 
 def velocity(velocityT):
-    print(round(- srf_velocity()[0], 5), round(srf_velocity()[1], 5), round(srf_velocity()[2], 5))
+#    print(round(- srf_velocity()[0], 5), round(srf_velocity()[1], 5), round(srf_velocity()[2], 5))
     velocityXList.append(round(- srf_velocity()[0], 5))
     velocityYList.append(round(srf_velocity()[1], 5))
     velocityZList.append(round(srf_velocity()[2], 5))
@@ -60,13 +60,13 @@ def PID(lastP, lastTime, totalP):
     altitudeList.append(altitude())
     autoThrottelList.append(autoThrottle)
     
-    #Textupdate
-    textP.content = 'up:' + str(vessel.control.up)
-    textI.content = 'forward:' + str(vessel.control.forward)
-    textD.content = 'right:' + str(vessel.control.right)
-    textO.content = 'long:' + str(long())
-    textA.content = 'lat:' + str(lat())
-    textT.content = 'Time:' + str(round((ut() - startTime), 2))
+    #Textupdate    
+    textP.update('up:' + str(vessel.control.up))
+    textI.update('forward:' + str(vessel.control.forward))
+    textD.update('right:' + str(vessel.control.right))
+    textO.update('long:' + str(long()))
+    textA.update('lat:' + str(lat()))
+    textT.update('Time:' + str(round((ut() - startTime), 2)))
 
     return lastP, lastTime, totalP
 
@@ -75,10 +75,13 @@ class text:
         self.Name = Name
         self.Y_Pos = Y_Pos
         
-        self = panel.add_text(Name) 
-        self.rect_transform.position = (0, Y_Pos)
-        self.color = (1,1,1)
-        self.size = 18
+        self.text = panel.add_text(Name) 
+        self.text.rect_transform.position = (0, Y_Pos)
+        self.text.color = (1,1,1)
+        self.text.size = 18
+    
+    def update(self, update):
+        self.text.content = update
         
 if __name__ == '__main__':
     
@@ -142,36 +145,6 @@ if __name__ == '__main__':
     textA = text('lat: ' + str(lat()), -35)
     textT = text('Time: 0', -55)
     
-#    textP = panel.add_text('up: ' + str(vessel.control.up)) #'P: '
-#    textP.rect_transform.position = (0,45)
-#    textP.color = (1,1,1)
-#    textP.size = 18
-#    
-#    textI = panel.add_text('forward: ' + str(vessel.control.forward)) #'I: '
-#    textI.rect_transform.position = (0,25)
-#    textI.color = (1,1,1)
-#    textI.size = 18
-#    
-#    textD = panel.add_text('right: ' + str(vessel.control.right)) #'D: '
-#    textD.rect_transform.position = (0,5)
-#    textD.color = (1,1,1)
-#    textD.size = 18
-#    
-#    textO = panel.add_text('long: ' + str(long())) #'Output: '
-#    textO.rect_transform.position = (0,-15)
-#    textO.color = (1,1,1)
-#    textO.size = 18
-#   
-#    textA = panel.add_text('lat: ' + str(lat())) #"Altitude: '
-#    textA.rect_transform.position = (0,-35)
-#    textA.color = (1,1,1)
-#    textA.size = 18
-#    
-#    textT = panel.add_text('Time: 0') #'Time: '
-#    textT.rect_transform.position = (0,-55)
-#    textT.color = (1,1,1)
-#    textT.size = 18
-
     #pre flight check
     if fuel() > 0:
         ap.engage()
